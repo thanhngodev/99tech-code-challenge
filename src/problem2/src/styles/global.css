@@ -1,0 +1,127 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body {
+  background: radial-gradient(circle at top, #1a1f2b, #0d1117);
+  font-family: Inter, system-ui, sans-serif;
+  color: #e5e7eb;
+}
+
+.swap-card {
+  width: 500px;
+  margin: 40px auto;
+  padding: 28px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.swap-title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.swap-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.swap-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 22px;
+  color: #fff;
+  width: 100%;
+  text-align: right;
+}
+
+.swap-input-card {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 12px;
+  padding: 16px;
+  width: 100%;
+}
+
+.swap-input::placeholder {
+  color: #6b7280;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.swap-divider {
+  text-align: center;
+  font-size: 20px;
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swap-divider-icon {
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  opacity: 0.6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+.swap-divider-icon:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.token-select-modern {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.token-icon-modern {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.token-dropdown-modern {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.token-dropdown-modern:focus {
+  outline: none;
+}
