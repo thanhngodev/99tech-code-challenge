@@ -1,0 +1,94 @@
+1. Define type and priority map
+
+```typescript
+type Blockchain = 'Osmosis' | 'Ethereum' | 'Arbitrum' | 'Zilliqa' | 'Neo';
+
+const PRIORITY_MAP: Record<Blockchain, number> = {
+  Osmosis: 100,
+  Ethereum: 50,
+  Arbitrum: 30,
+  Zilliqa: 20,
+  Neo: 20,
+};
+```
+
+--- --- --- --- ---
+
+2. Logic processing balances
+
+```typescript
+const processedBalances = useMemo(() => {
+  return balances
+    .filter(
+      (b) =>
+        b.amount > 0 &&
+        PRIORITY_MAP[b.blockchain as Blockchain] !== undefined
+    )
+    .map((b) => ({
+      ...b,
+      priority: PRIORITY_MAP[b.blockchain as Blockchain],
+      formatted: b.amount.toFixed(2),
+    }))
+    .sort((a, b) => b.priority - a.priority);
+}, [balances]);
+```
+
+- No repeated calls to getPriority
+- O(n log n) optimal
+- Clear logic
+
+--- --- --- --- ---
+
+3. Render rows correctly
+
+```typescript
+const rows = processedBalances.map((balance) => {
+  const price = prices[balance.currency] ?? 0;
+  const usdValue = price * balance.amount;
+
+  return (
+    <WalletRow
+      key={balance.currency}
+      className={classes.row}
+      amount={balance.amount}
+      usdValue={usdValue}
+      formattedAmount={balance.formatted}
+    />
+  );
+});
+```
+
+- Stable key
+- No NaN
+- Secure typing
+
+--- --- --- --- ---
+
+4. Final component
+
+```typescript
+const WalletPage: React.FC<Props> = ({ children, ...rest }) => {
+  const balances = useWalletBalances();
+  const prices = usePrices();
+
+  const processedBalances = useProcessedBalances(balances);
+
+  return (
+    <div {...rest}>
+      {processedBalances.map((balance) => (
+        <WalletRow
+          key={balance.currency}
+          amount={balance.amount}
+          usdValue={(prices[balance.currency] ?? 0) * balance.amount}
+          formattedAmount={balance.formatted}
+        />
+      ))}
+    </div>
+  );
+};
+```
+
+
+I focused more on identifying inefficiencies and React anti-patterns than just refactoring.
+The biggest issues were incorrect filtering logic, unnecessary recomputations in useMemo, repeated priority calculations, unsafe typing, and unstable React keys.
+I refactored by making the logic deterministic, type-safe, and reducing redundant computations while keeping the component easier to reason about.
