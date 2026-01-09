@@ -1,0 +1,88 @@
+1. Wrong types and severe lack of type safety.
+
+```
+const getPriority = (blockchain: any): number => { ... }
+```
+
+- Using any negates all the benefits of TypeScript.
+- Prone to runtime bugs.
+- No clear definition.
+
+--- --- --- --- ---
+
+2. Broken Filter Logic & Reference Errors
+
+```typescript
+balances.filter((balance) => {
+  const balancePriority = getPriority(balance.blockchain);
+  if (lhsPriority > -99) {
+    if (balance.amount <= 0) {
+      return true;
+    }
+  }
+  return false
+})
+```
+
+- `lhsPriority` is not defined.
+- Logic is inverted: returns `true` for zero/negative balances.
+- No early return for positive balances.
+- Unnecessary complexity.
+
+--- --- --- --- ---
+
+3. Incorrect useMemo Dependencies
+
+```typescript
+useMemo(() => { ... }, [balances, prices])
+```
+
+- Prices is never used inside the useMemo block.
+- Every time prices updates, the entire balances array is re-sorted unnecessarily.
+
+--- --- --- --- ---
+
+4. Redundant getPriority Calls
+
+Issue: The function is invoked repeatedly during array transformations:
+- Inside filter: n times.
+
+Actual Complexity:
+- filter: O(n)
+- sort: O(nlogn)
+- Highly inefficient.
+
+--- --- --- --- ---
+
+5. formattedBalances is declared but never used
+- Dead code
+- Wasting CPU
+
+--- --- --- --- ---
+
+6. Incorrect map type
+
+```typescript
+sortedBalances.map((balance: FormattedWalletBalance) => ...)
+```
+- sortedBalances is WalletBalance[]
+- But you're forcing FormattedWalletBalance
+- Type mismatch → dangerous
+
+--- --- --- --- ---
+
+7. key={index} — React anti-pattern
+
+- When sorting/filtering → React re-renders incorrectly
+- Performance + UI bugs
+
+--- --- --- --- ---
+
+8. Do not handle missing prices
+
+```typescript
+prices[balance.currency] * balance.amount
+```
+
+If prices[currency] === undefined
+
