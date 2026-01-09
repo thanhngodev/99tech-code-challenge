@@ -46,7 +46,17 @@ export const useSwap = () => {
     setToAmount(result.toFixed(6));
   }, [fromAmount, fromToken, toToken, prices]);
 
-  const tokens = useMemo(() => Object.keys(prices), [prices]);
+  const tokens = useMemo(
+    () => Object.keys(prices).filter((k) => prices[k] > 0),
+    [prices]
+  );
+
+  const swapDirection = () => {
+    setFromToken(toToken);
+    setToToken(fromToken);
+    setFromAmount("");
+    setToAmount("");
+  };
 
   return {
     tokens,
@@ -61,5 +71,6 @@ export const useSwap = () => {
     setFromToken,
     setToToken,
     setFromAmount,
+    swapDirection,
   };
 };
